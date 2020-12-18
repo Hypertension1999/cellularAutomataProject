@@ -83,7 +83,6 @@ def detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, a
                 if (M_List[i].hexdigest() == M_List[j].hexdigest()):
                     return(i, j, "Cycle")
 
-    result_matrix = transition
     for i in range(u_bound):
         foo = md5(result_matrix.data)
         M_List.append(foo)
