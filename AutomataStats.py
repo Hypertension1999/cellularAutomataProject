@@ -2,6 +2,7 @@ import Nayuki
 import numpy as np
 import math
 import sys
+from hashlib import md5
 
 """*** Notes from meeting on 11/24: Don't need to double count cycles already counted. """
 """5mod5: Need to extend for longer cycle detection. Bardzell says there is another / more cycles that we have not shown."""
@@ -55,37 +56,42 @@ def detect_cycle_transition_recurse_1(transition, alphabet, size):
     ZERO = np.zeros((size, size), dtype=int)
     I = np.identity(size, dtype=int)
 
+    I_hash = md5(I.data)
+    ZERO_hash = md5(ZERO.data)
+
 
     result_matrix = transition
     for i in range(u_bound):
-        M_List.append(result_matrix)
+        foo = md5(result_matrix.data)
+        M_List.append(foo)
         result_matrix = (np.matmul(transition, result_matrix)) % alphabet
 
     #result_matrix = transition
     #M_List.append(result_matrix)
-    return(detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO, I, u_bound))
+    return(detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO_hash, I_hash, u_bound))
 
-def detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO, I, u_bound):
+def detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO_hash, I_hash, u_bound):
 
     for i in range(len(M_List)):
         for j in range(i + 1, len(M_List)):
             if i != j:
                 # If true all states evloves to Zero State
-                if(M_List[j] == I).all():
+                if(M_List[j].hexdigest() == I_hash.hexdigest()):
                     return(i, j, "I")
-                if(M_List[j] == ZERO).all():
+                if(M_List[j].hexdigest() == ZERO_hash.hexdigest()):
                     return(i, j, "0")
-                if (M_List[i] == M_List[j]).all():
+                if (M_List[i].hexdigest() == M_List[j].hexdigest()):
                     return(i, j, "Cycle")
 
     result_matrix = transition
     for i in range(u_bound):
-        M_List.append(result_matrix)
+        foo = md5(result_matrix.data)
+        M_List.append(foo)
         result_matrix = (np.matmul(transition, result_matrix)) % alphabet
 
     #result_matrix = (np.matmul(transition, result_matrix)) % alphabet
     #M_List.append(result_matrix)
-    return(detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO, I, u_bound))
+    return(detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, alphabet, ZERO_hash, I_hash, u_bound))
 
 
 def is_reversible(B, rows, cols, size):
@@ -168,7 +174,7 @@ def generate_automata_stats(data, size, alphabet):
     #print("\nnullspace for matrix:")
     #Basis = B.get_nullspace()
     #print(Basis)
-
+    print("AAAAAAAAAAA")
     result_matrix_pow = transition
     Nullspace_list = { "nullspace": [], "power": [] }
     power = 1
@@ -198,7 +204,7 @@ def generate_automata_stats(data, size, alphabet):
     # Get Automata Stats
     unique_nullspace = detect_unique_cycle( Nullspace_list, alphabet, size )  # max steps
     Automata_stats = []
-
+    print("AAAAAAAAAAA")
     # Add final Cycle since the entire system is reversible
     if(reversible):
         result_matrix = I
