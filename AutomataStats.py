@@ -61,10 +61,13 @@ def detect_cycle_transition_recurse_1(transition, alphabet, size):
 
 
     result_matrix = transition
+    foo = md5(result_matrix.data)
+    M_List.append(foo)
+
     for i in range(u_bound):
+        result_matrix = (np.matmul(transition, result_matrix)) % alphabet
         foo = md5(result_matrix.data)
         M_List.append(foo)
-        result_matrix = (np.matmul(transition, result_matrix)) % alphabet
 
     #result_matrix = transition
     #M_List.append(result_matrix)
@@ -84,9 +87,9 @@ def detect_cycle_transition_recurse_2(M_List, transition, result_matrix, size, a
                     return(i, j, "Cycle")
 
     for i in range(u_bound):
+        result_matrix = (np.matmul(transition, result_matrix)) % alphabet
         foo = md5(result_matrix.data)
         M_List.append(foo)
-        result_matrix = (np.matmul(transition, result_matrix)) % alphabet
 
     #result_matrix = (np.matmul(transition, result_matrix)) % alphabet
     #M_List.append(result_matrix)
