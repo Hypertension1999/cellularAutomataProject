@@ -174,7 +174,7 @@ def generate_automata_stats(data, size, alphabet):
     #print("\nnullspace for matrix:")
     #Basis = B.get_nullspace()
     #print(Basis)
-    print("AAAAAAAAAAA")
+
     result_matrix_pow = transition
     Nullspace_list = { "nullspace": [], "power": [] }
     power = 1
@@ -204,7 +204,7 @@ def generate_automata_stats(data, size, alphabet):
     # Get Automata Stats
     unique_nullspace = detect_unique_cycle( Nullspace_list, alphabet, size )  # max steps
     Automata_stats = []
-    print("AAAAAAAAAAA")
+
     # Add final Cycle since the entire system is reversible
     if(reversible):
         result_matrix = I
